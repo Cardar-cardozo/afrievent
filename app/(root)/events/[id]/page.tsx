@@ -1,4 +1,4 @@
-// import CheckoutButton from "@/components/shared/CheckoutButton";
+import CheckoutButton from "@/components/shared/CheckoutButton";
 import Collection from "@/components/shared/Collection";
 import {
   getEventById,
@@ -49,13 +49,13 @@ const EventDetails = async ({
                 <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
                   by{" "}
                   <span className="text-primary-500">
-                    {event.organizer?.firstName} {event.organizer?.lastName}
+                    {event.organizer.firstName} {event.organizer.lastName}
                   </span>
                 </p>
               </div>
             </div>
 
-            {/* <CheckoutButton event={event} /> */}
+            <CheckoutButton event={event} />
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
@@ -89,7 +89,9 @@ const EventDetails = async ({
             </div>
 
             <div className="flex flex-col gap-2">
-              <p className="p-bold-20 text-grey-600">What You will Learn:</p>
+              <p className="p-bold-20 text-grey-600">
+                What You &apos; ll Learn:
+              </p>
               <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
               <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
                 {event.url}

@@ -17,6 +17,7 @@ import { eventFormSchema } from "@/lib/validator";
 import * as z from "zod";
 import { eventDefaultValues } from "@/constants";
 import Dropdown from "./Dropdown";
+import UserDropdown from "./UserDropDown";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUploader } from "./FileUploader";
 import { useState } from "react";
@@ -39,7 +40,7 @@ type EventFormProps = {
 
 const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const initialValues =
+  const initialValues: any =
     event && type === "Update"
       ? {
           ...event,
@@ -71,9 +72,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
     if (type === "Create") {
       try {
+        console.log(values)
         const newEvent = await createEvent({
           event: { ...values, imageUrl: uploadedImageUrl },
-          userId,
           path: "/profile",
         });
 
@@ -332,24 +333,14 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           />
           <FormField
             control={form.control}
-            name="url"
+            name="organizer"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <div className="flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
-                    <Image
-                      src="/assets/icons/link.svg"
-                      alt="link"
-                      width={24}
-                      height={24}
-                    />
-
-                    <Input
-                      placeholder="URL"
-                      {...field}
-                      className="input-field"
-                    />
-                  </div>
+                  <UserDropdown
+                    onChangeHandler={field.onChange}
+                    value={field.value}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
