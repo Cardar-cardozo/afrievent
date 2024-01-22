@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-
+import axios from "axios";
 import { IEvent } from "@/lib/database/models/event.model";
 import { Button } from "../ui/button";
-import { checkoutOrder } from "@/lib/actions/order.actions";
+import { checkoutOrder, createOrder } from "@/lib/actions/order.actions";
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -24,14 +24,26 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
 
   const onCheckout = async () => {
     const order = {
-      eventTitle: event.title,
       eventId: event._id,
-      price: event.price,
-      isFree: event.isFree,
+      totalAmount: event.price,
       buyerId: userId,
+      createdAt: new Date(),
     };
 
-    await checkoutOrder(order);
+     let b = { amount: Number(event.price), email: 'techt5562@gmail.com' };
+    let payment = axios.post('https://crazy-erin-trout.cyclic.app/api/checkout/payment', {
+      data: b,
+    })
+      .then(async (response : any) => {
+        console.log(response.data.data.data?.authorization_url);
+        let url = response.data.data.data?.authorization_url
+        
+        if (url) {
+          window.location.href = url
+        }
+        const newOrder = await createOrder(order);
+      })
+
   };
 
   return (
