@@ -4,6 +4,9 @@ import {
   getEventById,
   getRelatedEventsByCategory,
 } from "@/lib/actions/event.actions";
+import {
+getUserById
+} from "@/lib/actions/user.actions";
 import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import Image from "next/image";
@@ -14,7 +17,7 @@ const EventDetails = async ({
 }: SearchParamProps) => {
   const event = await getEventById(id);
 
-  console.log(event)
+
   const relatedEvents = await getRelatedEventsByCategory({
     categoryId: event.category._id,
     eventId: event._id,
@@ -104,7 +107,7 @@ const EventDetails = async ({
         </div>
       </section>
 
-      {/* EVENTS with the same category */}
+      {/* EVENTS with the same ceategory */}
       <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
         <h2 className="h2-bold">Related Events</h2>
 

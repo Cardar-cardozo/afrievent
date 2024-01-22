@@ -4,10 +4,12 @@ import axios from "axios";
 import { IEvent } from "@/lib/database/models/event.model";
 import { Button } from "../ui/button";
 import { checkoutOrder, createOrder } from "@/lib/actions/order.actions";
+import { getUserById } from "@/lib/actions/user.actions";
 
 loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
+   
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
@@ -30,7 +32,11 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
       createdAt: new Date(),
     };
 
-     let b = { amount: Number(event.price), email: 'techt5562@gmail.com' };
+     const user = await getUserById(event.organizer._id);
+
+     console.log(user);
+
+     let b = { amount: Number(event.price), email: user.email };
     let payment = axios.post('https://crazy-erin-trout.cyclic.app/api/checkout/payment', {
       data: b,
     })
